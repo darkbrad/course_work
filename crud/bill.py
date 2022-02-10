@@ -1,10 +1,7 @@
-from models.bill import RegistrationBillModel,BillModel
+from models.bill import BillModel
 import sqlite3
 import uuid
-from core import passwords
-from werkzeug.datastructures import Authorization
-from core.errors.auth_errors import AuthError
-from core.errors.registration_errors import UserExistsError
+
 from core.errors.transfer_errors import TransferError
 
 class BillCRUD:

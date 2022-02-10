@@ -3,8 +3,8 @@ from typing import Optional
 
 
 class RegistrationModel(BaseModel):
-    login: str = Field(min_length=6)
-    password: str = Field(min_length=8)
+    login: str
+    password: str
 
     @validator("login")
     def validate_login(cls, login: str) -> str:
@@ -12,15 +12,28 @@ class RegistrationModel(BaseModel):
         return login
 
 
+
+
 class BaseUserModel(BaseModel):
     id: str
     login: str
 
 
+
+
 class UserModel(BaseUserModel):
     id: str
     login: str
-    bills:int
-    balance:int
-    image:Optional[str]
-    password:str
+    bills: int
+    balance: int
+    password: str
+
+
+
+
+
+class AuthUserModel(BaseModel):
+    username: str
+    password: str
+
+

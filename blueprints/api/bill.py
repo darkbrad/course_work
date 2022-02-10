@@ -1,10 +1,9 @@
 from flask import Blueprint, jsonify,redirect
-from blueprints import  deps
-from models.bill import RegistrationBillModel
+from blueprints import deps
 from core.db import get_connection
 from crud import bill_crud,user_crud
 
-bill_blueprint=Blueprint('bill_blueprint', __name__ ,url_prefix="")
+bill_blueprint=Blueprint('bill_blueprint', __name__ ,url_prefix="/bill")
 
 
 @bill_blueprint.route("/",methods=["POST"])
@@ -13,7 +12,7 @@ def create_bill():
     with get_connection() as conn:
         bill_crud.create(conn,current_user)
         user_crud.new_bill(conn,current_user.login)
-    return redirect("/api/user/pages")
+    return redirect("/user/pages")
 @bill_blueprint.route("/<string:bill_id>",methods=["DELETE"])
 def unact(bill_id):
     with get_connection() as conn:
