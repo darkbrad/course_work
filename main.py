@@ -8,9 +8,10 @@ app = Flask(__name__)
 app.secret_key = 'super secret key'
 loging_manager = LoginManager(app)
 
+
 @loging_manager.user_loader
 def load_user(user_login):
-    print("load user")
+    print(f"load user - {user_login}")
     with get_connection() as conn:
         return UserLogin().fromDB(user_login, conn)
 

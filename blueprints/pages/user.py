@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, jsonify
-from flask_login import LoginManager, login_required
+from flask import Blueprint, render_template
+from flask_login import login_required
 
 pages_blueprint = Blueprint("pages_blueprint", __name__, url_prefix="/pages")
 
