@@ -12,13 +12,9 @@ class RegistrationModel(BaseModel):
         return login
 
 
-
-
 class BaseUserModel(BaseModel):
     id: str
     login: str
-
-
 
 
 class UserModel(BaseUserModel):
@@ -29,11 +25,6 @@ class UserModel(BaseUserModel):
     password: str
 
 
-
-
-
 class AuthUserModel(BaseModel):
     username: str
     password: str
-
-

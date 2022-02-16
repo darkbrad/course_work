@@ -1,13 +1,18 @@
 from pydantic import BaseModel, Field, validator
 from typing import Optional
 
+
 class RegistrationBillModel(BaseModel):
-    owner:str
+    owner: str
+
+
 class BillModel(BaseModel):
-    id:str
-    owner:str
-    balance:int
-    status:int
+    id: str
+    owner: str
+    balance: int
+    status: int
+
+
 class BaseBillModel(BaseModel):
-    id:str
-    balance:int
+    id: str
+    balance: int

@@ -37,7 +37,7 @@ def signup_post():
 
     with get_connection() as conn:
         user = user_crud.get(conn, name)
-        userLogin = UserLogin().create(user)
+        UserLogin().create(user)
         if user is not None:
             flash(f"User with login {name} already exist")
 
@@ -58,8 +58,7 @@ def login_post():
 
     with get_connection() as conn:
         user = user_crud.get(conn, name)
-        userLogin = UserLogin().create(user)
-        login_user(userLogin)
+
 
         if user_crud.authenticate(conn, auth_data) is None:
             flash("User does not exist")
@@ -70,7 +69,8 @@ def login_post():
         if auth_data.username == "":
             flash("Field name must be filled")
             return redirect(url_for("api_blueprint.auth_blueprint.login"))
-        user_data = user_crud.authenticate(conn, auth_data)
+        userLogin = UserLogin().create(user)
+        login_user(userLogin)
 
 
-    return redirect(f"/pages/profile/{user_data[1]}")
+    return redirect(f"/pages/profile/")

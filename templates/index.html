@@ -46,7 +46,9 @@
                                 <a class="nav-link tm-nav-link" href="">Home <span class="sr-only">(current)</span></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link tm-nav-link" href="pages/profile/{{login}}">MY CABINET</a>
+                                <a class="nav-link tm-nav-link"
+                                   href="{{ url_for('api_blueprint.pages_blueprint.cabinet') }}">MY CABINET</a>
+
                             </li>
 
                             <li class="nav-item">

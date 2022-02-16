@@ -1,11 +1,10 @@
 from models.user import RegistrationModel, UserModel
-from models.bill import BaseBillModel
+
 import sqlite3
 import uuid
 from core import passwords
 from werkzeug.datastructures import Authorization
-from core.errors.auth_errors import AuthError
-from core.errors.registration_errors import UserExistsError
+
 
 
 class UserCRUD:
@@ -37,6 +36,8 @@ class UserCRUD:
             return self.get(conn, auth_data.username)
         finally:
             cur.close()
+
+
 
     def get_login_by_id(self, conn: sqlite3.Connection, id):
         cur = conn.cursor()
@@ -70,6 +71,31 @@ class UserCRUD:
         finally:
             cur.close()
 
+
+
+    def getbyId(self, conn: sqlite3.Connection, id: str) -> UserModel or None:
+        cur = conn.cursor()
+
+        try:
+            cur.execute(
+                "SELECT User.id, User.login, User.bills,User.balance,User.password FROM User WHERE User.id=?",
+                (id,),
+            )
+            row = cur.fetchone()
+
+            if row is None:
+                return None
+
+            id, login, bills, balance, password = row
+
+            if id is None:
+                return None
+
+            return row
+        finally:
+            cur.close()
+
+
     def get_all_bills(self, conn: sqlite3.Connection, user_id: str):
         cur = conn.cursor()
         try:
@@ -82,7 +108,7 @@ class UserCRUD:
     def new_bill(self, conn: sqlite3.Connection, login) -> None:
         cur = conn.cursor()
         try:
-            amount_of_bills = self.get(conn, login).bills
+            amount_of_bills = self.get(conn, login)[3]
             cur.execute('''UPDATE User SET bills = REPLACE(bills,?,?) WHERE User.login=?''', (int(amount_of_bills), int(amount_of_bills) + 1, login), )
         finally:
             cur.close()
@@ -101,8 +127,8 @@ class UserCRUD:
         try:
 
             login = self.get_login_by_id(conn, id)
-            password = self.get(conn, login).password
-            bills = self.get(conn, login).bills
+            password = self.get(conn, login)[4]
+            bills = self.get(conn, login)[2]
             start_balance = self.get_balance(conn, id)[0]
             print(start_balance)
             cur.execute("DELETE FROM User WHERE User.login=?", (login,), )
@@ -121,3 +147,19 @@ class UserCRUD:
                 return [sender_row, receiver_row]
         finally:
             cur.close()
+
+    def get_user_password_change(self, conn: sqlite3.Connection, id: str, new_password: str):
+        cur = conn.cursor()
+        try:
+                cur.execute("UPDATE User SET password = ? WHERE id = ?", (passwords.hash_password(new_password), id))
+        finally:
+            cur.close()
+
+    def delete_user(self,conn: sqlite3.Connection, id: str):
+        cur = conn.cursor()
+        try:
+            cur.execute("DELETE FROM User where id = ?", (id,))
+
+        finally:
+            cur.close()
+
